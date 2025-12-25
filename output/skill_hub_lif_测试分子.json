@@ -1,0 +1,120 @@
+{
+  "molecule": {
+    "smiles": "CC(=O)c1ccc(CF)c(C(F)(F)F)c1",
+    "name": "测试分子"
+  },
+  "queries": [
+    {
+      "step": 1,
+      "description": "查询 C-F 键邻近官能团",
+      "query_type": "OC.adjacent_groups",
+      "response": {
+        "success": true,
+        "data": {
+          "adjacent_groups": [
+            {
+              "distance": 1,
+              "atom_index": 1,
+              "element": "C",
+              "fg_type": "ketone",
+              "is_ewg": true,
+              "is_edg": null
+            },
+            {
+              "distance": 2,
+              "atom_index": 2,
+              "element": "O",
+              "fg_type": "ketone",
+              "is_ewg": true,
+              "is_edg": null
+            },
+            {
+              "distance": 2,
+              "atom_index": 3,
+              "element": "C",
+              "fg_type": "ketone",
+              "is_ewg": true,
+              "is_edg": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "step": 2,
+      "description": "查询邻近基团的吸电子效应",
+      "query_type": "PC.ewg_strength",
+      "response": {
+        "success": true,
+        "data": {
+          "ewg_strength": {
+            "substituent": "乙酰基 (CH3C=O)",
+            "I_effect": {
+              "sign": "-I",
+              "strength": "strong",
+              "reason": "羰基氧的高电负性通过σ键产生显著的吸电子诱导效应"
+            },
+            "M_effect": {
+              "sign": "-M",
+              "strength": "strong",
+              "reason": "羰基π*轨道是强吸电子共振受体，通过共轭体系稳定负电荷"
+            },
+            "net_classification": "strong_ewg",
+            "effect_on_target": {
+              "direction": "electron_withdrawing",
+              "magnitude": "significant",
+              "reason": "乙酰基是典型的强吸电子基团，通过-I和-M协同作用显著降低目标碳原子的电子密度",
+              "pathway_analysis": {
+                "direct_path": "目标C(sp3)-C(sp2)-C(sp2)-O",
+                "conjugation": "乙酰基与苯环共轭，电子效应通过π系统传递",
+                "distance_effect": "目标原子与取代基相隔3个σ键，诱导效应有一定衰减但仍显著"
+              }
+            },
+            "comparative_notes": "乙酰基的吸电子强度强于卤素、氰基等常见EWG，与硝基、三氟甲基相当"
+          }
+        }
+      }
+    },
+    {
+      "step": 3,
+      "description": "查询 C-F 键活化程度",
+      "query_type": "PC.bond_activation",
+      "response": {
+        "success": true,
+        "data": {
+          "bond_activation": {
+            "activation_level": "high",
+            "sigma_star_energy": "lowered",
+            "activating_factors": [
+              {
+                "factor": "Ketone carbonyl group",
+                "effect": "Strong -I and -M effects lower the σ* orbital energy of the adjacent C-C bond"
+              },
+              {
+                "factor": "α-position to carbonyl",
+                "effect": "The C-C bond is directly adjacent to the carbonyl carbon, maximizing orbital overlap and electronic activation"
+              },
+              {
+                "factor": "Conjugation with aromatic ring",
+                "effect": "Extended π-system provides additional delocalization pathways for the σ* orbital"
+              },
+              {
+                "factor": "Fluorine substituents",
+                "effect": "Strong -I effect from CF and CF3 groups further lowers σ* orbital energy through inductive withdrawal"
+              }
+            ],
+            "susceptible_to": [
+              "reduction",
+              "radical_attack",
+              "nucleophilic_addition",
+              "single_electron_transfer"
+            ],
+            "mechanistic_notes": "The C(0)-C(1) bond is the α-C-C bond of an acetophenone derivative. Reduction typically occurs via: 1) Single electron transfer to the carbonyl π* orbital, forming a radical anion that weakens the α-C-C bond; 2) Direct reduction of the σ* orbital; 3) Radical attack at the α-position. The presence of electron-withdrawing fluorine substituents enhances reduction susceptibility by lowering both π* and σ* orbital energies.",
+            "comparative_context": "This bond is more activated than typical aliphatic C-C bonds due to carbonyl conjugation, but less activated than bonds α to nitro or cyano groups. The CF3 substituent provides additional activation compared to simple acetophenone."
+          }
+        }
+      }
+    }
+  ],
+  "analysis": "```yaml\nlif_tendency_analysis:\n  molecule: \"测试分子 (CC(=O)c1ccc(CF)c(C(F)(F)F)c1)\"\n  likelihood: \"medium\"\n  f_source:\n    - \"芳环上的单氟取代基 (-CF)\"\n    - \"芳环上的三氟甲基 (-CF3)\"\n  mechanism:\n    primary: \"单电子还原诱导的 C-F 键均裂\"\n    description: |\n      在负极深还原电位下，分子可能经历以下路径释放氟离子 (F⁻)：\n      1.  **初始还原**：电子优先加成到强吸电子的乙酰基羰基 (C=O) 的 π* 轨道，形成羰基自由基阴离子。\n      2.  **电子转移与活化**：羰基自由基阴离子的负电荷和未配对电子可通过共轭体系（苯环）部分离域到邻近的 C-F 键上。乙酰基和氟取代基的强吸电子效应 (-I, -M) 协同作用，显著降低了 C-F 键 σ* 反键轨道的能量，使其更容易接受电子。\n      3.  **C-F 键断裂**：电子直接或间接（通过分子内电子转移）进入 C-F 键的 σ* 轨道，导致键的弱化和均裂，生成芳基自由基和氟离子 (F⁻)。\n      4.  **LiF 沉淀**：释放出的 F⁻ 与电解液中的 Li⁺ 结合，形成不溶性的 LiF 沉淀，成为 SEI 的无机组分。\n    notes: \"三氟甲基 (-CF3) 中的 C-F 键通常比单氟取代 (-CF) 中的更稳定，但在强还原环境和邻近强吸电子基团的协同活化下，其断裂风险依然存在。\"\n  lif_contribution: \"中等\"\n  evidence:\n    - \"**强吸电子环境**：跨域查询确认，目标 C-F 键邻近乙酰基（强吸电子基团，-I 和 -M 效应显著）。这种环境极大地降低了 C-F 键 σ* 轨道的能量，使其在还原电位下更易被还原断裂。\"\n    - \"**键活化程度高**：物理化学分析（PC.bond_activation）指出，由于羰基和氟取代基的协同作用，相关化学键（包括 C-F 键所在的电子环境）的活化程度为 'high'，且易受 'reduction' 和 'single_electron_transfer' 影响。\"\n    - \"**明确的电子效应路径**：乙酰基的吸电子效应通过共轭的苯环体系有效传递至氟取代的碳原子，为还原电子攻击 C-F 键提供了清晰的分子内电子转移或离域路径。\"\n    - \"**存在多个氟源**：分子结构中含有两个明确的氟原子来源（-CF 和 -CF3），增加了体系中潜在可释放氟的总量。\"\n  confidence: \"medium-high\"\n  reasoning: |\n    综合判断 LiF 形成倾向为 **中等 (medium)**。\n    *   **支持因素**：分子中存在强吸电子基团（乙酰基）与 C-F 键通过共轭体系直接相连，创造了极有利于 C-F 键还原断裂的电子环境。这是 LiF 形成的强有力结构前提。\n    *   **限制因素**：氟原子直接连接在芳香环上（C(sp2)-F）。与脂肪族的 C(sp3)-F 键相比，芳基 C-F 键的键能通常更高，断裂需要更负的电位或更强的活化能。此外，三氟甲基中的 C-F 键也相对稳定。\n    *   **结论**：尽管结构上存在显著的还原活化驱动力，但由于氟原子所处的化学环境（芳香体系）本身具有一定的稳定性，其断裂倾向并非最高。因此，评估为中等可能性，在实际电池的深还原条件下（如石墨负极首周循环）有较大概率发生，但可能不是最优先的还原路径（羰基本身的还原可能更优先）。\n```"
+}
